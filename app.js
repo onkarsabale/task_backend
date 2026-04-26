@@ -15,25 +15,31 @@ const allowedOrigins = [
   "https://frontend-theta-seven-99.vercel.app"
 ];
 
+
+// ✅ MIDDLEWARE
+app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://frontend-theta-seven-99.vercel.app"
+];
+
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like Postman, mobile apps)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    const isAllowed = allowedOrigins.some(o => origin.startsWith(o));
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      console.log("Blocked by CORS:", origin);
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
 }));
 
-// handle preflight requests
 app.options("*", cors());
-
-// ✅ MIDDLEWARE
-app.use(express.json());
 
 // ✅ ROUTES
 app.get("/", (req, res) => {
