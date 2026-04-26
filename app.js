@@ -9,19 +9,43 @@ const pricingRoutes = require("./routes/pricing.routes");
 
 const app = express();
 
+// ✅ CORS CONFIG (FIXED)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://frontend-theta-seven-99.vercel.app"
+];
+
 app.use(cors({
-  origin: 'https://frontend-theta-seven-99.vercel.app',
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman, mobile apps)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
-app.options('*', cors());
+// handle preflight requests
+app.options("*", cors());
+
+// ✅ MIDDLEWARE
 app.use(express.json());
+
+// ✅ ROUTES
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 
 app.use("/admin", adminRoutes);
 app.use("/admin/pricing", pricingRoutes);
 app.use("/farmers", farmerRoutes);
 app.use("/buyers", buyerRoutes);
 
+// ✅ DATABASE CONNECTION
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
