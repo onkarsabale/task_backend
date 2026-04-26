@@ -1,0 +1,1 @@
+module.exports=require('mongoose').model('Inventory',new(require('mongoose').Schema)({cropName:String,totalQuantity:Number,reservedQuantity:Number,isActive:Boolean,priorityLevel:Number}));
