@@ -15,6 +15,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
+app.options('*', cors()); // handles preflight
 app.use(express.json());
 
 app.use("/admin", adminRoutes);
