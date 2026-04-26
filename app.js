@@ -10,12 +10,11 @@ const pricingRoutes = require("./routes/pricing.routes");
 const app = express();
 
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  origin: 'https://frontend-theta-seven-99.vercel.app',
+  credentials: true
 }));
-app.options('*', cors()); // handles preflight
+
+app.options('*', cors());
 app.use(express.json());
 
 app.use("/admin", adminRoutes);
